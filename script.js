@@ -2,6 +2,7 @@ var application = {
   init: function() {
     this.createModel();
     this.createCollection();
+    this.createGroceryList();
     this.createTemplates();
     this.renderItems();
   },
@@ -9,12 +10,17 @@ var application = {
     this.GroceryItem = Backbone.Model.extend();
   },
   createCollection: function() {
-    var self = this;
-
     this.GroceryList = Backbone.Collection.extend({
       type: this.GroceryItem
     });
-
+  },
+  createTemplates: function() {
+    this.itemTemplate = Handlebars.compile($('#item').html());
+    Handlebars.registerPartial('item', this.itemTemplate);
+    this.itemsTemplate = Handlebars.compile($('#items').html());
+  },
+  createGroceryList: function() {
+    var self = this;
     this.list = new this.GroceryList();
 
     var savedList = this.getList();
@@ -28,11 +34,6 @@ var application = {
         self.list.add(groceryItem);
       });
     }
-  },
-  createTemplates: function() {
-    this.itemTemplate = Handlebars.compile($('#item').html());
-    Handlebars.registerPartial('item', this.itemTemplate);
-    this.itemsTemplate = Handlebars.compile($('#items').html());
   },
   createGroceryItem: function(name, quantity) {
     var newGroceryItem = new this.GroceryItem({
@@ -84,12 +85,14 @@ var application = {
     this.renderItems();
   },
   sortListByQuantity: function() {
-    this.list.comparator = 'quantity';
+    this.list.comparator = function(groceryItem) {
+      return parseInt(groceryItem.get('quantity'));
+    }
     this.list.sort();
     this.renderItems();
   },
   addListeners() {
-    $('form').off();
+    this.clearAllListeners();
     $('main > p').on('click', this.handleDeleteAll.bind(this));
     $('form').on('submit', this.handleSubmit.bind(this));
     $('td > a').on('click', this.handleDeleteItem.bind(this));
@@ -107,6 +110,13 @@ var application = {
   },
   getList: function() {
     return JSON.parse(localStorage.getItem('groceryList'));
+  },
+  clearAllListeners: function(node) {
+    $('main > p').off();
+    $('form').off();
+    $('td > a').off();
+    $('[data-prop="name"]').off();
+    $('[data-prop="quantity"]').off();
   }
 };
 
