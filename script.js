@@ -11,7 +11,7 @@ var application = {
   },
   createCollection: function() {
     this.GroceryList = Backbone.Collection.extend({
-      type: this.GroceryItem
+      model: this.GroceryItem
     });
   },
   createTemplates: function() {
