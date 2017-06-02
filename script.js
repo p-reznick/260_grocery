@@ -11,7 +11,16 @@ var application = {
   },
   createCollection: function() {
     this.GroceryList = Backbone.Collection.extend({
-      model: this.GroceryItem
+      model: this.GroceryItem,
+      getLastID: function() {
+        if (this.length === 0) {
+          return 0;
+        }
+        return this.last().get('id');
+      },
+      getNextID: function() {
+        return this.getLastID() + 1;
+      }
     });
   },
   createTemplates: function() {
@@ -30,7 +39,7 @@ var application = {
     } else {
       items_json.forEach(function(item) {
         var groceryItem = new self.GroceryItem(item);
-        groceryItem.set('id', self.getAndIncrementID());
+        groceryItem.set('id', self.list.getNextID());
         self.list.add(groceryItem);
       });
     }
@@ -39,7 +48,7 @@ var application = {
     var newGroceryItem = new this.GroceryItem({
       name: name,
       quantity: quantity,
-      id: this.getAndIncrementID()
+      id: this.list.getNextID()
     });
 
     this.list.add(newGroceryItem);
@@ -98,11 +107,6 @@ var application = {
     $('td > a').on('click', this.handleDeleteItem.bind(this));
     $('[data-prop="name"]').on('click', this.sortListByName.bind(this));
     $('[data-prop="quantity"]').on('click', this.sortListByQuantity.bind(this));
-  },
-  getAndIncrementID: function() {
-    var savedID = parseInt(localStorage.getItem('groceryID'), 10);
-    localStorage.setItem('groceryID', savedID + 1);
-    return savedID || 0;
   },
   saveList: function() {
     listString = JSON.stringify(this.list.toJSON());
