@@ -9,34 +9,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.8/handlebars.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
     <script src="templates/compiledTemplates.js"></script>
+    <script src="./views/item.js"></script>
+    <script src="./views/list.js"></script>
+    <script src="./views/application.js"></script>
     <script src="./script.js"></script>
   </head>
   <body>
-    <main>
-      <table>
-        <thead>
-          <tr>
-            <th data-prop="name">Name</th>
-            <th data-prop="quantity" colspan="2">Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-      <p><a href="#">Delete all</a></p>
-
-      <form action="" method="post">
-        <fieldset>
-          <dl>
-            <dt><label for="name">Name</label></dt>
-            <dd><input type="text" name="name" /></dd>
-            <dt><label for="quantity">Quantity</label></dt>
-            <dd><input type="text" name="quantity" /></dd>
-          </dl>
-          <input type="submit" value="Add Item" />
-        </fieldset>
-      </form>
-    </main>
     <script>
       var items_json = [{
         name: "Bananas",

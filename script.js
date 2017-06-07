@@ -3,8 +3,16 @@ var application = {
     this.createModel();
     this.createCollection();
     this.createGroceryList();
-    this.createTemplates();
-    this.renderItems();
+    this.createViews();
+  },
+  createViews: function() {
+    this.applicationView = new ApplicationView();
+    this.listView = new ListView({
+      collection: this.list
+    });
+    this.itemView  = new ItemView({
+      model: this.GroceryItem
+    });
   },
   createModel: function() {
     this.GroceryItem = Backbone.Model.extend();
@@ -22,11 +30,6 @@ var application = {
         return this.getLastID() + 1;
       }
     });
-  },
-  createTemplates: function() {
-    this.itemTemplate = Handlebars.templates.item;
-    Handlebars.registerPartial('item', this.itemTemplate);
-    this.itemsTemplate = Handlebars.templates.items
   },
   createGroceryList: function() {
     var self = this;
@@ -55,12 +58,7 @@ var application = {
     this.saveList();
   },
   renderItems: function() {
-    var context = { items: this.list.models };
-    var itemsHTML = this.itemsTemplate(context);
-
-    $('tbody').html(itemsHTML);
-
-    this.addListeners();
+    this.listView.render();
   },
   handleDeleteAll: function(e) {
     e.preventDefault();
@@ -70,6 +68,7 @@ var application = {
     this.saveList();
   },
   handleDeleteItem: function(e) {
+    console.log('deleting');
     e.preventDefault();
 
     var id = $(e.target).attr('data-id');
