@@ -24,9 +24,9 @@ var application = {
     });
   },
   createTemplates: function() {
-    this.itemTemplate = Handlebars.compile($('#item').html());
+    this.itemTemplate = Handlebars.templates.item;
     Handlebars.registerPartial('item', this.itemTemplate);
-    this.itemsTemplate = Handlebars.compile($('#items').html());
+    this.itemsTemplate = Handlebars.templates.items
   },
   createGroceryList: function() {
     var self = this;
